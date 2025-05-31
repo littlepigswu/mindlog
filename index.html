@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindLog | SambyLi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4A6FA5',
+                        secondary: '#E07A5F',
+                        neutral: '#F4F1DE',
+                        dark: '#3D405B',
+                        accent: '#81B29A',
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-balance {
+                text-wrap: balance;
+            }
+            .card-hover {
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            }
+            .card-hover:hover {
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+                transform: translateY(-2px);
+            }
+            .nav-shadow {
+                box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.1);
+            }
+            .skeleton {
+                background-color: #e2e8f0;
+                animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+                border-radius: 0.25rem;
+            }
+            @keyframes pulse {
+                0%, 100% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0.5;
+                }
+            }
+        }
+    </style>
+    <style>
+        /* 自定义样式 */
+        .transition-all {
+            transition-property: all;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 300ms;
+        }
+        .hover-shadow-lg:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .hover-translate-y-1:hover {
+            transform: translateY(-1px);
+        }
+        .focus-ring-2:focus {
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+        }
+        .focus-ring-primary-300:focus {
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.3);
+        }
+        .focus-border-primary:focus {
+            border-color: #4A6FA5;
+        }
+        .text-gray-400 {
+            color: #9CA3AF;
+        }
+        .text-primary {
+            color: #4A6FA5;
+        }
+        .hover-text-primary:hover {
+            color: #4A6FA5;
+        }
+        .bg-primary {
+            background-color: #4A6FA5;
+        }
+        .text-white {
+            color: white;
+        }
+        .bg-white {
+            background-color: white;
+        }
+        .text-dark {
+            color: #3D405B;
+        }
+        .rounded-full {
+            border-radius: 9999px;
+        }
+        .border {
+            border-width: 1px;
+        }
+        .border-gray-200 {
+            border-color: #E5E7EB;
+        }
+        .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        .pl-10 {
+            padding-left: 2.5rem;
+        }
+        .pr-4 {
+            padding-right: 1rem;
+        }
+        .w-full {
+            width: 100%;
+        }
+        .absolute {
+            position: absolute;
+        }
+        .right-3 {
+            right: 0.75rem;
+        }
+        .left-3 {
+            left: 0.75rem;
+        }
+        .top-1-2 {
+            top: 50%;
+        }
+        .transform {
+            transform: translateY(-50%);
+        }
+        .opacity-0 {
+            opacity: 0;
+        }
+        .opacity-100 {
+            opacity: 1;
+        }
+        .invisible {
+            visibility: hidden;
+        }
+        .visible {
+            visibility: visible;
+        }
+        .py-3 {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+        .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="font-inter bg-neutral/30 text-dark min-h-screen flex flex-col">
+    <!-- 导航栏 -->
+    <header id="navbar" class="fixed w-full bg-white/90 backdrop-blur-sm z-50 transition-all duration-300">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between nav-shadow">
+            <a href="#" class="flex items-center space-x-2">
+                <span class="text-primary text-2xl"><i class="fa fa-lightbulb-o"></i></span>
+                <span class="font-bold text-xl text-dark">MindLog</span>
+            </a>
+            
+            <!-- 桌面端导航 -->
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#" class="font-medium text-dark hover:text-primary transition-colors">首页</a>
+                <div class="relative group">
+                    <button class="font-medium text-dark hover:text-primary transition-colors flex items-center">
+                        分类
+                        <i class="fa fa-chevron-down ml-1 text-xs"></i>
+                    </button>
+                    <div class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                        <a href="#" data-category="all" class="block px-4 py-2 text-sm hover:bg-primary/10 hover:text-primary">全部</a>
+                        <a href="#" data-category="ai" class="block px-4 py-2 text-sm hover:bg-primary/10 hover:text-primary">AI</a>
+                        <a href="#" data-category="hobby" class="block px-4 py-2 text-sm hover:bg-primary/10 hover:text-primary">爱好</a>
+                        <a href="#" data-category="milestone" class="block px-4 py-2 text-sm hover:bg-primary/10 hover:text-primary">大事记</a>
+                        <a href="#" data-category="study" class="block px-4 py-2 text-sm hover:bg-primary/10 hover:text-primary">学业</a>
+                        <a href="#" data-category="life" class="block px-4 py-2 text-sm hover:bg-primary/10 hover:text-primary">生活</a>
+                    </div>
+                </div>
+                <a href="#about" class="font-medium text-dark hover:text-primary transition-colors">关于</a>
+            </nav>
+            
+            <!-- 搜索框 -->
+            <div class="relative hidden md:block w-64">
+                <div class="relative">
+                    <input id="search-input" type="text" placeholder="搜索内容..." class="w-full pl-10 pr-10 py-2 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all">
+                    <button id="search-button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary transition-colors">
+                        <i class="fa fa-long-arrow-right"></i>
+                    </button>
+                    <i class="fa fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                </div>
+            </div>
+            
+            <!-- 移动端菜单按钮 -->
+            <button id="mobile-menu-button" class="md:hidden text-dark focus:outline-none">
+                <i class="fa fa-bars text-xl"></i>
+            </button>
+        </div>
+        
+        <!-- 移动端导航菜单 -->
+        <div id="mobile-menu" class="md:hidden bg-white shadow-lg absolute w-full left-0 top-full opacity-0 transition-all duration-300 transform -translate-y-4 pointer-events-none">
+            <div class="container mx-auto px-4 py-3">
+                <div class="relative mb-4">
+                    <div class="relative">
+                        <input id="mobile-search-input" type="text" placeholder="搜索内容..." class="w-full pl-10 pr-10 py-2 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all">
+                        <button id="mobile-search-button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary transition-colors">
+                            <i class="fa fa-long-arrow-right"></i>
+                        </button>
+                        <i class="fa fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                </div>
+                <nav class="flex flex-col space-y-3">
+                    <a href="#" class="font-medium text-dark hover:text-primary transition-colors py-2">首页</a>
+                    <div class="relative">
+                        <button id="mobile-category-button" class="font-medium text-dark hover:text-primary transition-colors flex items-center justify-between py-2">
+                            分类
+                            <i class="fa fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="mobile-category-menu" class="mt-1 ml-4 hidden">
+                            <a href="#" data-category="all" class="block py-2 text-sm">全部</a>
+                            <a href="#" data-category="ai" class="block py-2 text-sm">AI</a>
+                            <a href="#" data-category="hobby" class="block py-2 text-sm">爱好</a>
+                            <a href="#" data-category="milestone" class="block py-2 text-sm">大事记</a>
+                            <a href="#" data-category="study" class="block py-2 text-sm">学业</a>
+                            <a href="#" data-category="life" class="block py-2 text-sm">生活</a>
+                        </div>
+                    </div>
+                    <a href="#about" class="font-medium text-dark hover:text-primary transition-colors py-2">关于</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="flex-grow pt-20 pb-10">
+        <div class="container mx-auto px-4">
+            <!-- 页面标题 -->
+            <div class="text-center mb-12 mt-6">
+                <h1 class="text-[clamp(2rem,5vw,3rem)] font-bold text-dark mb-3">MindLog</h1>
+                <p class="text-gray-600 max-w-2xl mx-auto text-balance">一个立体的李博远^ ^</p>
+            </div>
+            
+            <!-- 分类标签 -->
+            <div class="flex flex-wrap justify-center gap-2 mb-10">
+                <button data-category="all" class="category-btn bg-primary text-white px-4 py-2 rounded-full text-sm font-medium transition-all">全部</button>
+                <button data-category="ai" class="category-btn bg-white text-dark px-4 py-2 rounded-full text-sm font-medium transition-all">AI</button>
+                <button data-category="hobby" class="category-btn bg-white text-dark px-4 py-2 rounded-full text-sm font-medium transition-all">爱好</button>
+                <button data-category="milestone" class="category-btn bg-white text-dark px-4 py-2 rounded-full text-sm font-medium transition-all">大事记</button>
+                <button data-category="study" class="category-btn bg-white text-dark px-4 py-2 rounded-full text-sm font-medium transition-all">学业</button>
+                <button data-category="life" class="category-btn bg-white text-dark px-4 py-2 rounded-full text-sm font-medium transition-all">生活</button>
+            </div>
+            
+            <!-- 思考内容流 -->
+            <div id="thoughts-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 骨架屏加载效果 -->
+                <div class="skeleton-card col-span-full md:col-span-1 lg:col-span-1 bg-white rounded-lg overflow-hidden shadow-md animate-pulse">
+                    <div class="p-6">
+                        <div class="flex items-center mb-3">
+                            <div class="skeleton w-20 h-5 rounded-full"></div>
+                            <div class="skeleton ml-2 w-24 h-4 rounded"></div>
+                        </div>
+                        <div class="skeleton h-8 w-3/4 rounded mb-4"></div>
+                        <div class="skeleton h-4 w-full rounded mb-2"></div>
+                        <div class="skeleton h-4 w-5/6 rounded mb-2"></div>
+                        <div class="skeleton h-4 w-2/3 rounded mb-6"></div>
+                        <div class="skeleton h-5 w-24 rounded"></div>
+                    </div>
+                </div>
+                <div class="skeleton-card col-span-full md:col-span-1 lg:col-span-1 bg-white rounded-lg overflow-hidden shadow-md animate-pulse">
+                    <div class="p-6">
+                        <div class="flex items-center mb-3">
+                            <div class="skeleton w-20 h-5 rounded-full"></div>
+                            <div class="skeleton ml-2 w-24 h-4 rounded"></div>
+                        </div>
+                        <div class="skeleton h-8 w-2/3 rounded mb-4"></div>
+                        <div class="skeleton h-4 w-full rounded mb-2"></div>
+                        <div class="skeleton h-4 w-5/6 rounded mb-2"></div>
+                        <div class="skeleton h-4 w-3/4 rounded mb-6"></div>
+                        <div class="skeleton h-5 w-24 rounded"></div>
+                    </div>
+                </div>
+                <div class="skeleton-card col-span-full md:col-span-1 lg:col-span-1 bg-white rounded-lg overflow-hidden shadow-md animate-pulse">
+                    <div class="p-6">
+                        <div class="flex items-center mb-3">
+                            <div class="skeleton w-20 h-5 rounded-full"></div>
+                            <div class="skeleton ml-2 w-24 h-4 rounded"></div>
+                        </div>
+                        <div class="skeleton h-8 w-4/5 rounded mb-4"></div>
+                        <div class="skeleton h-4 w-full rounded mb-2"></div>
+                        <div class="skeleton h-4 w-5/6 rounded mb-2"></div>
+                        <div class="skeleton h-4 w-3/4 rounded mb-6"></div>
+                        <div class="skeleton h-5 w-24 rounded"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 没有更多内容 -->
+            <div id="no-more-content" class="text-center py-10 hidden">
+                <p class="text-gray-500">我也是有底线滴~</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- 关于部分 -->
+    <section id="about" class="bg-white py-16">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto text-center">
+                <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-dark mb-6">关于MindLog</h2>
+                <p class="text-gray-600 mb-8 leading-relaxed">
+                    这里是我通过文字，记录自己的地方。<br>
+                    这个网站为了未来的自己而做，唯一的受众也是未来的自己。
+                </p>
+                <div class="flex justify-center space-x-4">
+                    <a href="mailto:1920295921@qq.com" target="_blank" class="text-primary hover:text-primary/80 transition-colors">
+                        <i class="fa fa-envelope-o text-xl"></i>
+                    </a>
+                    <a href="https://github.com/xiaoeyuSWU" target="_blank" class="text-primary hover:text-primary/80 transition-colors">
+                        <i class="fa fa-github text-xl"></i>
+                    </a>
+                    <a href="https://liboyuan.site/" target="_blank" class="text-primary hover:text-primary/80 transition-colors">
+                        <i class="fa fa-globe text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0 text-center md:text-left">
+                    <a href="#" class="flex items-center justify-center md:justify-start space-x-2">
+                        <span class="text-white text-xl"><i class="fa fa-lightbulb-o"></i></span>
+                        <span class="font-bold text-lg">MindLog</span>
+                    </a>
+                    <p class="text-gray-400 text-sm mt-1">记录思考，见证成长</p>
+                </div>
+                <div class="text-gray-400 text-sm">
+                    &copy; 2024 MindLog | 保留所有权利
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <button id="back-to-top" class="fixed bottom-6 right-6 bg-primary text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-primary/90 focus:outline-none">
+        <i class="fa fa-chevron-up"></i>
+    </button>
+
+    <script>
+        // 思考内容数据
+        const thoughts = [
+            {
+                id: 1,
+                title: "冥想",
+                content: "冥想（包含Youga Nidra）一直是我日常生活中的重要部分。通过冥想，我可以放松身心，提升专注力和内在的平静。在繁忙的学业和项目之间，冥想可以帮助我保持平衡和清晰的思维。截至2024年9月24日，潮汐app记录了我数千分钟的冥想时长。",
+                category: "hobby",
+                date: "2022-09-01",
+                media: null
+            },
+            {
+                id: 2,
+                title: "学习委员",
+                content: "作为班级的学习委员，我按照要求工作，协助老师完成相关事宜，帮助同学们答疑解惑。这段经历不仅锻炼了我的组织能力，也让我更加深刻地理解了团队协作的重要性。甚至“学委”成了我的标签。在我从我当学委的班级转走之后，原先的班级还有同学喊我学委。",
+                category: "milestone",
+                date: "2023-09-12",
+                media: null
+            },
+            {
+                id: 3,
+                title: "初探Python与数据科学",
+                content: "开始学习Python，探索数据处理与可视化的世界。通过完成一些小型项目，逐渐掌握Python的基本语法和常用库，为后续的学习（尤其是机器学习和云计算方面）和研究打下了基础。现在看来，选择Python这门语言是非常正确的，虽然我现在正在编写的代码是HTML哈哈哈。",
+                category: "ai",
+                date: "2022-10-10",
+                media: null
+            },
+            {
+                id: 4,
+                title: "加入西南大学融媒体中心",
+                content: "成为西南大学党委学生工作部融媒体中心微博部的一员，负责西南大学官方微博的编辑和发布。这段经历增加了我的团队协作能力，同时也提高了我的表达能力。也是第一次感受到了，“官方号”后面的活生生的人。所以我觉得很多时候，官方号也不必那么官方~腾讯招聘的官方号就很活泼可爱，展现了公司的积极形象。",
+                category: "milestone",
+                date: "2022-09-15",
+                media: null
+            },
+            {
+                id: 5,
+                title: "宫崎骏的电影",
+                content: "我是宫崎骏的忠实粉丝。千与千寻这部电影，从小到大（哪怕是到现在）我还会n刷，到现在早看了几十次了。还看过很多其他的，比如风之谷、天空之城、龙猫、魔女宅急便、幽灵公主、千与千寻、哈尔的移动城堡等。",
+                category: "hobby",
+                date: "2004-07-02",
+                media: null
+            },
+            {
+                id: 6,
+                title: "喜欢的其他电影、电视剧和音乐",
+                content: "我还喜欢很多电影，比如情书、错过你的那些年等。\n喜欢的电视剧包括老友记和爱情公寓。\n喜欢王菲、单依纯、孙燕姿、张碧晨、莫文蔚、陶喆、方大同和许嵩等人的歌。",
+                category: "hobby",
+                date: "2012-09-11",
+                media: null
+            },
+            {
+                id: 7,
+                title: "“六不人员”",
+                content: "我对未来的规划：不考研不保研不出国不考公，不卷综测奖学金，不考川渝电网，也就是本科就就业。我确实热爱科研，热爱探索和钻研，如果能在自己感兴趣的领域深造，当然是幸福的事情，但是我仍然选择不读研，是因为相比于对科研的热爱，我更不希望我还要多至少三年的时间才能毕业，而且我厌恶不确定性，考研或保研，也不是说成功就可以成功的。\n其实大多数人读研是为了以后就业更好，但我坚信，只要自己足够优秀，本科的就业质量也会让我满意，所以我一直在不断的努力着。",
+                category: "study",
+                date: "2025-04-22",
+                media: null
+            },
+            {
+                id: 8,
+                title: "AI不会淘汰太多人，但会大幅削弱不会用AI的人的竞争力",
+                content: "这两天试了试AI Agent，发现很多Agent还是比较好用的。国内的其他AI比如豆包，元宝，DeepSeek也都蛮不错。我突然发现，自己之前几周才能完成的事情，现在AI几小时，甚至几分钟就可以完成，难道代表之前的努力没有意义了吗？\n某种意义上，面向结果来说，确实是这样的。但是正让我意识到一个事：AI会大幅提高人的效率，不会用甚至不愿用AI的人，都会被大幅削弱竞争力。\n还有一点：有些很厉害的AI还是国外的，比如ChatGPT，Claude和Gemini。这些确实都很厉害，而国内大部分人都是用不上这些AI的。\n所以，人和人的差距会体现在：是否会用AI（知道如何提问，或者说是写prompt）以及能否接触到最前沿的AI（比如AI Agent和国外的一些AI）上。",
+                category: "ai",
+                date: "2025-05-23",
+                media: null
+            },
+            {
+                id: 9,
+                title: "获得全国大学生数学建模竞赛国奖",
+                content: "提前几个月开始备战2024年全国大学生数学建模竞赛，与2位计算机学院的队友一起学习。最终竞赛获得国奖。这次竞赛让我深刻体会到了数学建模在解决实际问题中的强大力量。\n说实话如果是我一个人单枪匹马，肯定拿不到国奖，都是大家一起努力的结果。所以团队协作很重要呀。",
+                category: "milestone",
+                date: "2024-05-15",
+                media: null
+            },
+            {
+                id: 10,
+                title: "发表自动驾驶轨迹预测SCI论文",
+                content: "以核心作者身份在IEEE Transactions on Vehicular Technology期刊上发表了一篇关于自动驾驶车辆轨迹预测的SCI论文。\n因为这个成果是入学第二年的时候的，甚至有些人质疑我的成果。但我从来没有解释过，也不会解释。但我知道，为了它，我吃了很多苦。",
+                category: "milestone",
+                date: "2024-06-20",
+                media: null
+            },
+            {
+                id: 11,
+                title: "学会思考很主要，培养自己独立思考的习惯",
+                content: "找工作面试的时候，面试官喜欢“深挖简历”，喜欢“拷打”，我认为核心都是：基于我们提供的信息，不断去了解我们到底在解决一个什么问题、当时是基于什么做出了这样的决策。也就是了解我们的思考的过程。回到我的底层能力上进行考察，了解一个立体的我，深度的我。\n而且，要学会向内求而不是向外求。准备面试时，与其看很多别人的面经，不如好好回顾一下自己。在呈现的简历中，除了我想传达的这些成绩之外，中间自己有过什么思考、收获了哪些成长、突破到底在哪里？这个过程也是不断更加了解自己的过程，而且准备好了这些，更可以以不变应万变，更可以自如地面对各种各样的面试官的问题。",
+                category: "study",
+                date: "2025-05-27",
+                media: null
+            },
+            {
+                id: 12,
+                title: "获得腾讯CSIG事业群暑期实习机会",
+                content: "经过多轮面试，终于获得了腾讯CSIG事业群的暑期实习机会，负责腾讯AI和云计算产品的落地与解决方案。我很开心也很珍惜这次机会，这对我来说是一个非常难得的学习和成长机会，我非常期待能在这个岗位上有所作为。\n不过我和同事接触的时候，明显感觉他/她们很优秀，而且他/她们大多是985的，我明显感觉到学校的平台和提供的资源不一样。但这不影响我喜欢西南大学^ ^选择西南大学是我这一生最不后悔的事情之一。",
+                category: "milestone",
+                date: "2025-04-10",
+                media: null
+            },
+            {
+                id: 13,
+                title: "开发基于DeepSeek的智能助手",
+                content: "通过调用API，我开发了一个图形化聊天界面，实现了与大语言模型的便捷交互。此外，我还完成了DeepSeek模型的本地部署，显著提高了响应速度。这个项目让我对大语言模型的应用有了更深入的理解。\n其实这个项目难度也不是特别高，只要你愿意钻研愿意学习，只不过很多人都只是停留在想法层面而已。所以我觉得，人和人之间的差距，很大程度上就是执行力的差距。",
+                category: "ai",
+                date: "2025-04-20",
+                media: null
+            },
+            {
+                id: 14,
+                title: "坚持跑步",
+                content: "喜欢在四运跑步，之前甚至经常大半夜在外面跑。目前最远的一次是跑了16km，40圈。计划有时间跑个20km，50圈~",
+                category: "hobby",
+                date: "2024-09-20",
+                media: null
+            },
+            {
+                id: 15,
+                title: "有时要把目光拉长，有时要把目光拉短",
+                content: "人生，长远的看，有好多事情要做哇。有的时候想到，难免也会有些焦虑。如果把目光拉短，享受当下，就更会发现生活的美好。生活中总有一些小小的幸福时刻，比如清晨的第一缕阳光、一杯热咖啡、一本好书，或者与朋友的一次愉快聊天。这些看似平凡的瞬间，却是构成美好人生的重要部分。",
+                category: "life",
+                date: "2025-05-20",
+                media: null
+            },
+            {
+                id: 16,
+                title: "担任比亚迪校园大使",
+                content: "作为比亚迪2025届校园大使，我协助HR进行校招相关事宜，向同学们介绍比亚迪的企业文化和招聘信息。这段经历让我对汽车行业有了更深入的了解，也锻炼了我的沟通和组织能力。",
+                category: "milestone",
+                date: "2024-05-20",
+                media: null
+            },
+            {
+                id: 17,
+                title: "学习日文",
+                content: "计划有时间的话，就开始学习日文，准确的说是复习，因为之前有过相关的基础。还是比较喜欢日本的文化，希望以后有机会可以去日本玩。",
+                category: "hobby",
+                date: "2025-05-27",
+                media: null
+            },
+            {
+                id: 18,
+                title: "事常与人违，事总在人为",
+                content: "好事坏事，都会变成故事^ ^",
+                category: "life",
+                date: "2025-05-15",
+                media: null
+            },
+            {
+                id: 19,
+                title: "爱看美剧，最爱看老友记",
+                content: "平时最爱看的就是老友记，只不过目前还没刷完10季，刷完了会2刷3刷的。\n这部剧里我最喜欢菲比，喜欢她的精神状态，我感觉我的性格和她也有点像，心理状态良好哈哈哈。\n最不喜欢的是罗斯，主要是因为罗斯很多时候太钻牛角尖了，比如菲比不相信进化论罗斯就急了，非要说服她，其实都无所谓呀。没必要非要改变别人的想法。",
+                category: "hobby",
+                date: "2025-05-29",
+                media: null
+            },
+           {
+                id: 20,
+                title: "只筛选不改变",
+                content: "交朋友也好，选择伴侣也罢，成年人的世界都要“只筛选不改变”。改变他人需突破其数十年固化的认知与防御机制，成本远高于筛选同频者，而自我成长才是关系中唯一可控的变量。",
+                category: "life",
+                date: "2025-05-29",
+                media: null
+            },
+
+        ];
+
+        // 当前显示的思考数量
+        let currentCount = 0;
+        // 每次加载的数量
+        const loadCount = 500;
+        // 当前筛选的分类
+        let currentCategory = 'all';
+        // 当前搜索关键词
+        let currentSearchTerm = '';
+        // 是否正在加载
+        let isLoading = false;
+
+        // DOM 元素
+        const thoughtsContainer = document.getElementById('thoughts-container');
+        const noMoreContentIndicator = document.getElementById('no-more-content');
+        const backToTopButton = document.getElementById('back-to-top');
+        const navbar = document.getElementById('navbar');
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileCategoryButton = document.getElementById('mobile-category-button');
+        const mobileCategoryMenu = document.getElementById('mobile-category-menu');
+        const searchInput = document.getElementById('search-input');
+        const mobileSearchInput = document.getElementById('mobile-search-input');
+        const searchButton = document.getElementById('search-button');
+        const mobileSearchButton = document.getElementById('mobile-search-button');
+        const categoryButtons = document.querySelectorAll('.category-btn');
+
+        // 分类名称映射
+        const categoryNames = {
+            'ai': 'AI',
+            'hobby': '爱好',
+            'milestone': '大事记',
+            'study': '学业',
+            'life': '生活'
+        };
+
+        // 分类颜色映射
+        const categoryColors = {
+            'ai': 'bg-blue-500',
+            'hobby': 'bg-purple-500',
+            'milestone': 'bg-orange-500',
+            'study': 'bg-green-500',
+            'life': 'bg-pink-500'
+        };
+
+        // 计算每个类别的内容数量
+        function calculateCategoryCounts() {
+            const counts = {
+                all: thoughts.length,
+                ai: 0,
+                hobby: 0,
+                milestone: 0,
+                study: 0,
+                life: 0
+            };
+            
+            thoughts.forEach(thought => {
+                if (counts[thought.category]) {
+                    counts[thought.category]++;
+                }
+            });
+            
+            return counts;
+        }
+
+        // 更新类别按钮的计数显示
+        function updateCategoryCounts() {
+            const counts = calculateCategoryCounts();
+            const categoryButtons = document.querySelectorAll('.category-btn');
+            
+            categoryButtons.forEach(button => {
+                const category = button.getAttribute('data-category');
+                let buttonText = '';
+                
+                switch(category) {
+                    case 'all':
+                        buttonText = '全部';
+                        break;
+                    case 'ai':
+                        buttonText = 'AI';
+                        break;
+                    case 'hobby':
+                        buttonText = '爱好';
+                        break;
+                    case 'milestone':
+                        buttonText = '大事记';
+                        break;
+                    case 'study':
+                        buttonText = '学业';
+                        break;
+                    case 'life':
+                        buttonText = '生活';
+                        break;
+                }
+                
+                button.textContent = `${buttonText} (${counts[category]})`;
+            });
+        }
+
+        // 创建思考卡片
+        function createThoughtCard(thought) {
+            const card = document.createElement('article');
+            card.className = `bg-white rounded-lg overflow-hidden shadow-md card-hover transition-all duration-300`;
+            card.setAttribute('data-category', thought.category);
+            
+            // 处理内容中的换行符
+            const formattedContent = thought.content.replace(/\n/g, '<br>');
+            
+            // 卡片内容
+            card.innerHTML = `
+                <div class="p-6">
+                    <div class="flex items-center mb-3">
+                        <span class="inline-block px-2 py-1 rounded-full text-xs font-medium ${categoryColors[thought.category]} text-white">
+                            ${categoryNames[thought.category]}
+                        </span>
+                        <span class="ml-2 text-sm text-gray-500">${formatDate(thought.date)}</span>
+                    </div>
+                    <h3 class="text-xl font-bold mt-4 mb-3 text-dark">${thought.title}</h3>
+                    <p class="text-gray-600 mb-4 line-clamp-4">${formattedContent}</p>
+                    <button class="read-more-btn text-primary font-medium hover:text-primary/80 transition-colors flex items-center">
+                        阅读更多
+                        <i class="fa fa-long-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            `;
+            
+            // 添加阅读更多事件
+            const readMoreBtn = card.querySelector('.read-more-btn');
+            readMoreBtn.addEventListener('click', () => {
+                showThoughtDetail(thought);
+            });
+            
+            return card;
+        }
+
+        // 格式化日期
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('zh-CN', options);
+        }
+
+        // 显示思考详情
+        function showThoughtDetail(thought) {
+            // 处理内容中的换行符
+            const formattedContent = thought.content.replace(/\n/g, '<br>');
+            
+            // 创建遮罩层
+            const overlay = document.createElement('div');
+            overlay.className = 'fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4';
+            
+            // 创建模态框
+            const modal = document.createElement('div');
+            modal.className = 'bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-auto';
+            
+            // 模态框内容
+            modal.innerHTML = `
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center">
+                            <span class="inline-block px-2 py-1 rounded-full text-xs font-medium ${categoryColors[thought.category]} text-white">
+                                ${categoryNames[thought.category]}
+                            </span>
+                            <span class="ml-2 text-sm text-gray-500">${formatDate(thought.date)}</span>
+                        </div>
+                        <button class="close-modal text-gray-400 hover:text-gray-600 transition-colors">
+                            <i class="fa fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    <h2 class="text-2xl font-bold mt-6 mb-4 text-dark">${thought.title}</h2>
+                    <p class="text-gray-700 leading-relaxed">${formattedContent}</p>
+                </div>
+            `;
+            
+            // 添加到页面
+            overlay.appendChild(modal);
+            document.body.appendChild(overlay);
+            
+            // 关闭模态框
+            const closeModalBtn = modal.querySelector('.close-modal');
+            closeModalBtn.addEventListener('click', () => {
+                document.body.removeChild(overlay);
+            });
+            
+            // 点击遮罩层关闭
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    document.body.removeChild(overlay);
+                }
+            });
+            
+            // 键盘ESC关闭
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    document.body.removeChild(overlay);
+                }
+            });
+        }
+
+        // 筛选思考内容
+        function filterThoughts(category, searchTerm) {
+            return thoughts.filter(thought => {
+                const categoryMatch = category === 'all' || thought.category === category;
+                
+                // 处理搜索关键词为空的情况
+                if (!searchTerm) {
+                    return categoryMatch;
+                }
+                
+                // 将搜索词分解为单词数组
+                const searchWords = searchTerm.toLowerCase().split(/\s+/);
+                
+                // 检查标题和内容是否包含所有搜索词
+                const searchMatch = searchWords.every(word => {
+                    // 简化匹配逻辑，不使用单词边界断言
+                    return thought.title.toLowerCase().includes(word) || 
+                        thought.content.toLowerCase().includes(word);
+                });
+                
+                return categoryMatch && searchMatch;
+            });
+        }
+
+        // 搜索或筛选后更新类别计数（显示当前筛选条件下的计数）
+        function updateCategoryCountsAfterSearch() {
+            const counts = {
+                all: filterThoughts('all', currentSearchTerm).length,
+                ai: filterThoughts('ai', currentSearchTerm).length,
+                hobby: filterThoughts('hobby', currentSearchTerm).length,
+                milestone: filterThoughts('milestone', currentSearchTerm).length,
+                study: filterThoughts('study', currentSearchTerm).length,
+                life: filterThoughts('life', currentSearchTerm).length
+            };
+            
+            const categoryButtons = document.querySelectorAll('.category-btn');
+            categoryButtons.forEach(button => {
+                const category = button.getAttribute('data-category');
+                let buttonText = '';
+                
+                switch(category) {
+                    case 'all':
+                        buttonText = '全部';
+                        break;
+                    case 'ai':
+                        buttonText = 'AI';
+                        break;
+                    case 'hobby':
+                        buttonText = '爱好';
+                        break;
+                    case 'milestone':
+                        buttonText = '大事记';
+                        break;
+                    case 'study':
+                        buttonText = '学业';
+                        break;
+                    case 'life':
+                        buttonText = '生活';
+                        break;
+                }
+                
+                button.textContent = `${buttonText} (${counts[category]})`;
+            });
+        }
+
+        // 修改后的思考内容排序逻辑
+        function loadThoughts() {
+            // 如果正在加载，直接返回
+            if (isLoading) return;
+            
+            isLoading = true;
+            
+            // 筛选思考内容
+            const filteredThoughts = filterThoughts(currentCategory, currentSearchTerm);
+            
+            // 按日期降序排序（最新的在前）
+            const sortedThoughts = [...filteredThoughts].sort((a, b) => {
+                return new Date(b.date) - new Date(a.date); // 降序排列，最新的在前
+            });
+            
+            const totalCount = sortedThoughts.length;
+            
+            // 移除骨架屏
+            const skeletonCards = document.querySelectorAll('.skeleton-card');
+            skeletonCards.forEach(card => {
+                card.remove();
+            });
+            
+            // 计算本次加载的数量
+            const remainingCount = totalCount - currentCount;
+            const countToLoad = Math.min(loadCount, remainingCount);
+            
+            // 模拟加载延迟
+            setTimeout(() => {
+                // 添加新的思考卡片
+                for (let i = 0; i < countToLoad; i++) {
+                    const thought = sortedThoughts[currentCount + i];
+                    const card = createThoughtCard(thought);
+                    thoughtsContainer.appendChild(card);
+                }
+                
+                // 更新当前显示的数量
+                currentCount += countToLoad;
+                
+                // 检查是否还有更多内容
+                if (currentCount >= totalCount) {
+                    noMoreContentIndicator.classList.remove('hidden');
+                }
+                
+                isLoading = false;
+            }, 1);
+        }    
+
+        // 重置并重新加载思考内容
+        function resetAndLoadThoughts() {
+            // 清空容器
+            thoughtsContainer.innerHTML = '';
+            
+            // 如果搜索词不为空，且没有结果，显示提示
+            const filteredThoughts = filterThoughts(currentCategory, currentSearchTerm);
+            if (currentSearchTerm && filteredThoughts.length === 0) {
+                thoughtsContainer.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <i class="fa fa-search text-4xl text-gray-300 mb-4"></i>
+                        <p class="text-gray-500">没有找到与"${currentSearchTerm}"相关的内容</p>
+                    </div>
+                `;
+                noMoreContentIndicator.classList.add('hidden');
+                
+                // 更新类别计数（考虑搜索后的结果）
+                updateCategoryCountsAfterSearch();
+                return;
+            }
+            
+            // 重置计数
+            currentCount = 0;
+            
+            // 添加骨架屏
+            for (let i = 0; i < 3; i++) {
+                const skeletonCard = document.createElement('div');
+                skeletonCard.className = 'skeleton-card col-span-full md:col-span-1 lg:col-span-1 bg-white rounded-lg overflow-hidden shadow-md animate-pulse';
+                skeletonCard.innerHTML = `
+                    <div class="p-6">
+                        <div class="flex items-center mb-3">
+                            <div class="skeleton w-20 h-5 rounded-full"></div>
+                            <div class="skeleton ml-2 w-24 h-4 rounded"></div>
+                        </div>
+                        <div class="skeleton h-8 w-${Math.floor(Math.random() * 20 + 60)}% rounded mb-4"></div>
+                        <div class="skeleton h-4 w-full rounded mb-2"></div>
+                        <div class="skeleton h-4 w-${Math.floor(Math.random() * 20 + 60)}% rounded mb-2"></div>
+                        <div class="skeleton h-4 w-${Math.floor(Math.random() * 20 + 40)}% rounded mb-6"></div>
+                        <div class="skeleton h-5 w-24 rounded"></div>
+                    </div>
+                `;
+                thoughtsContainer.appendChild(skeletonCard);
+            }
+            
+            // 延迟加载内容，给骨架屏显示时间
+            setTimeout(() => {
+                loadThoughts();
+                // 更新类别计数（考虑筛选后的结果）
+                updateCategoryCountsAfterSearch();
+            }, 500);
+        }
+
+        // 处理滚动加载
+        function handleScroll() {
+            const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+            
+            // 当滚动到页面底部附近时加载更多内容
+            if (scrollTop + clientHeight >= scrollHeight - 300 && !isLoading && currentCount < thoughts.length) {
+                loadThoughts();
+            }
+            
+            // 控制返回顶部按钮的显示/隐藏
+            if (scrollTop > 300) {
+                backToTopButton.classList.remove('opacity-0', 'invisible');
+                backToTopButton.classList.add('opacity-100', 'visible');
+                navbar.classList.add('py-2');
+                navbar.classList.remove('py-3');
+            } else {
+                backToTopButton.classList.add('opacity-0', 'invisible');
+                backToTopButton.classList.remove('opacity-100', 'visible');
+                navbar.classList.remove('py-2');
+                navbar.classList.add('py-3');
+            }
+        }
+
+        // 返回顶部
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // 统一处理分类筛选
+        function handleCategoryFilter() {
+            // 获取所有分类按钮和链接
+            const categoryElements = document.querySelectorAll('[data-category]');
+            
+            categoryElements.forEach(element => {
+                element.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // 更新当前分类
+                    currentCategory = element.getAttribute('data-category');
+                    
+                    // 更新所有分类按钮样式
+                    categoryElements.forEach(btn => {
+                        if (btn.getAttribute('data-category') === currentCategory) {
+                            // 主分类标签按钮
+                            if (btn.classList.contains('category-btn')) {
+                                btn.classList.add('bg-primary', 'text-white');
+                                btn.classList.remove('bg-white', 'text-dark');
+                            }
+                            
+                            // 导航菜单中的分类链接
+                            if (btn.tagName === 'A') {
+                                btn.classList.add('text-primary', 'font-medium');
+                                btn.classList.remove('text-dark');
+                            }
+                        } else {
+                            // 主分类标签按钮
+                            if (btn.classList.contains('category-btn')) {
+                                btn.classList.remove('bg-primary', 'text-white');
+                                btn.classList.add('bg-white', 'text-dark');
+                            }
+                            
+                            // 导航菜单中的分类链接
+                            if (btn.tagName === 'A') {
+                                btn.classList.remove('text-primary', 'font-medium');
+                                btn.classList.add('text-dark');
+                            }
+                        }
+                    });
+                    
+                    // 移动端菜单处理
+                    if (!mobileMenu.classList.contains('opacity-0')) {
+                        toggleMobileMenu();
+                    }
+                    
+                    if (!mobileCategoryMenu.classList.contains('hidden')) {
+                        toggleMobileCategoryMenu();
+                    }
+                    
+                    // 重置并加载思考内容
+                    resetAndLoadThoughts();
+                });
+            });
+        }    
+
+        // 处理搜索
+        function handleSearch() {
+            function performSearch() {
+                // 获取搜索关键词
+                const searchTerm = searchInput.value.trim() || mobileSearchInput.value.trim();
+                
+                // 如果关键词变化了，才执行搜索
+                if (searchTerm !== currentSearchTerm) {
+                    currentSearchTerm = searchTerm;
+                    resetAndLoadThoughts();
+                }
+            }
+            
+            // 搜索按钮事件
+            searchButton.addEventListener('click', performSearch);
+            mobileSearchButton.addEventListener('click', performSearch);
+            
+            // 搜索输入框回车事件
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            mobileSearchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+        }
+
+        // 切换移动端菜单
+        function toggleMobileMenu() {
+            if (mobileMenu.classList.contains('opacity-0')) {
+                mobileMenu.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-4');
+                mobileMenu.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+                mobileMenuButton.innerHTML = '<i class="fa fa-times text-xl"></i>';
+            } else {
+                mobileMenu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-4');
+                mobileMenu.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+                mobileMenuButton.innerHTML = '<i class="fa fa-bars text-xl"></i>';
+            }
+        }
+
+        // 切换移动端分类菜单
+        function toggleMobileCategoryMenu() {
+            if (mobileCategoryMenu.classList.contains('hidden')) {
+                mobileCategoryMenu.classList.remove('hidden');
+                mobileCategoryButton.innerHTML = '分类 <i class="fa fa-chevron-up text-xs"></i>';
+            } else {
+                mobileCategoryMenu.classList.add('hidden');
+                mobileCategoryButton.innerHTML = '分类 <i class="fa fa-chevron-down text-xs"></i>';
+            }
+        }
+
+        // 初始化
+        function init() {
+            // 加载初始思考内容
+            resetAndLoadThoughts();
+            
+            // 更新类别计数
+            updateCategoryCounts();
+            
+            // 注册滚动事件
+            window.addEventListener('scroll', handleScroll);
+            
+            // 注册返回顶部按钮事件
+            backToTopButton.addEventListener('click', scrollToTop);
+            
+            // 注册移动端菜单按钮事件
+            mobileMenuButton.addEventListener('click', toggleMobileMenu);
+            
+            // 注册移动端分类菜单按钮事件
+            mobileCategoryButton.addEventListener('click', toggleMobileCategoryMenu);
+            
+            // 注册分类筛选事件 - 使用统一的处理函数
+            handleCategoryFilter();
+            
+            // 注册搜索事件
+            handleSearch();
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
