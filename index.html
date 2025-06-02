@@ -163,12 +163,154 @@
             padding-top: 0.5rem;
             padding-bottom: 0.5rem;
         }
+        
+        /* 密码验证界面样式 */
+        .password-container {
+            background: linear-gradient(135deg, #4A6FA5 0%, #3D405B 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            transition: opacity 0.5s ease;
+        }
+        
+        .password-card {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+            padding: 40px;
+            transform: translateY(0);
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+        }
+        
+        .password-card:hover {
+            box-shadow: 0 15px 60px rgba(0, 0, 0, 0.3);
+            transform: translateY(-5px);
+        }
+        
+        .password-icon {
+            width: 80px;
+            height: 80px;
+            background-color: #4A6FA5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            color: white;
+            font-size: 32px;
+            transition: all 0.3s ease;
+        }
+        
+        .password-icon:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(74, 111, 165, 0.5);
+        }
+        
+        .password-input {
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+        
+        .password-input:focus {
+            outline: none;
+            border-color: #4A6FA5;
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
+        }
+        
+        .password-button {
+            background-color: #4A6FA5;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .password-button:hover {
+            background-color: #3a5a85;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(74, 111, 165, 0.3);
+        }
+        
+        .password-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 6px rgba(74, 111, 165, 0.3);
+        }
+        
+        .password-error {
+            color: #e07a5f;
+            font-size: 14px;
+            margin-top: 10px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+        
+        .password-error.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* 内容淡入效果 */
+        .content-fade-in {
+            animation: fadeIn 0.5s ease forwards;
+            opacity: 0;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="font-inter bg-neutral/30 text-dark min-h-screen flex flex-col">
+    <!-- 密码验证界面 -->
+    <div id="password-container" class="password-container">
+        <div class="password-card">
+            <div class="password-icon">
+                <i class="fa fa-lock"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-center text-dark mb-2">私密内容</h2>
+            <p class="text-gray-500 text-center mb-8">请输入密码访问</p>
+            
+            <form id="password-form" class="space-y-4">
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">密码</label>
+                    <div class="relative">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            class="password-input focus:ring-primary-300 focus:border-primary"
+                            placeholder="请输入密码"
+                            required
+                        >
+                        <button type="button" id="toggle-password" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary transition-colors">
+                            <i class="fa fa-eye-slash"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="password-error" id="password-error">密码错误，请重试</div>
+                
+                <button type="submit" class="password-button hover-shadow-lg hover-translate-y-1">
+                    确认
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- 导航栏 -->
-    <header id="navbar" class="fixed w-full bg-white/90 backdrop-blur-sm z-50 transition-all duration-300">
+    <header id="navbar" class="fixed w-full bg-white/90 backdrop-blur-sm z-50 transition-all duration-300 content-fade-in" style="opacity: 0; visibility: hidden;">
         <div class="container mx-auto px-4 py-3 flex items-center justify-between nav-shadow">
             <a href="#" class="flex items-center space-x-2">
                 <span class="text-primary text-2xl"><i class="fa fa-lightbulb-o"></i></span>
@@ -247,7 +389,7 @@
     </header>
 
     <!-- 主内容区 -->
-    <main class="flex-grow pt-20 pb-10">
+    <main class="flex-grow pt-20 pb-10 content-fade-in" style="opacity: 0; visibility: hidden;">
         <div class="container mx-auto px-4">
             <!-- 页面标题 -->
             <div class="text-center mb-12 mt-6">
@@ -317,7 +459,7 @@
     </main>
 
     <!-- 关于部分 -->
-    <section id="about" class="bg-white py-16">
+    <section id="about" class="bg-white py-16 content-fade-in" style="opacity: 0; visibility: hidden;">
         <div class="container mx-auto px-4">
             <div class="max-w-3xl mx-auto text-center">
                 <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-dark mb-6">关于MindLog</h2>
@@ -341,7 +483,7 @@
     </section>
 
     <!-- 页脚 -->
-    <footer class="bg-dark text-white py-8">
+    <footer class="bg-dark text-white py-8 content-fade-in" style="opacity: 0; visibility: hidden;">
         <div class="container mx-auto px-4">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="mb-4 md:mb-0 text-center md:text-left">
@@ -364,6 +506,77 @@
     </button>
 
     <script>
+        // 密码验证
+        const PASSWORD = '513870';
+        const passwordContainer = document.getElementById('password-container');
+        const passwordForm = document.getElementById('password-form');
+        const passwordInput = document.getElementById('password');
+        const passwordError = document.getElementById('password-error');
+        const togglePassword = document.getElementById('toggle-password');
+        const contentElements = document.querySelectorAll('.content-fade-in');
+        const navbar = document.getElementById('navbar');
+        
+        // 检查密码是否已验证
+        function checkPassword() {
+            const isAuthenticated = localStorage.getItem('mindLogAuthenticated') === 'true';
+            
+            if (isAuthenticated) {
+                showContent();
+            } else {
+                passwordContainer.style.display = 'flex';
+            }
+        }
+        
+        // 显示内容
+        function showContent() {
+            passwordContainer.style.opacity = '0';
+            setTimeout(() => {
+                passwordContainer.style.display = 'none';
+            }, 500);
+            
+            // 显示内容并添加淡入动画
+            contentElements.forEach(element => {
+                element.style.opacity = '1';
+                element.style.visibility = 'visible';
+            });
+            
+            // 延迟显示导航栏，使动画更流畅
+            setTimeout(() => {
+                navbar.style.opacity = '1';
+                navbar.style.visibility = 'visible';
+            }, 200);
+        }
+        
+        // 密码表单提交处理
+        passwordForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const enteredPassword = passwordInput.value.trim();
+            
+            if (enteredPassword === PASSWORD) {
+                // 密码正确
+                localStorage.setItem('mindLogAuthenticated', 'true');
+                showContent();
+            } else {
+                // 密码错误
+                passwordError.classList.add('show');
+                passwordInput.classList.add('border-red-500');
+                
+                // 3秒后重置错误提示
+                setTimeout(() => {
+                    passwordError.classList.remove('show');
+                    passwordInput.classList.remove('border-red-500');
+                }, 3000);
+            }
+        });
+        
+        // 切换密码可见性
+        togglePassword.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            togglePassword.innerHTML = type === 'password' ? '<i class="fa fa-eye-slash"></i>' : '<i class="fa fa-eye"></i>';
+        });
+        
         // 思考内容数据（将从JSON文件加载）
         let thoughts = [];
         
@@ -384,7 +597,6 @@
         const thoughtsContainer = document.getElementById('thoughts-container');
         const noMoreContentIndicator = document.getElementById('no-more-content');
         const backToTopButton = document.getElementById('back-to-top');
-        const navbar = document.getElementById('navbar');
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
         const mobileCategoryButton = document.getElementById('mobile-category-button');
@@ -416,7 +628,7 @@
         // 从JSON文件加载思考内容
         async function loadThoughtsFromJSON() {
             try {
-                const response = await fetch('thoughts.json');
+                const response = await fetch('thoughts_real.json');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -901,6 +1113,9 @@
 
         // 初始化
         async function init() {
+            // 检查密码
+            checkPassword();
+            
             // 从JSON加载数据
             await loadThoughtsFromJSON();
             
@@ -935,4 +1150,4 @@
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
-</html>    
+</html>
