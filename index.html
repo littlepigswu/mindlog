@@ -516,17 +516,6 @@
         const contentElements = document.querySelectorAll('.content-fade-in');
         const navbar = document.getElementById('navbar');
         
-        // 检查密码是否已验证
-        function checkPassword() {
-            const isAuthenticated = localStorage.getItem('mindLogAuthenticated') === 'true';
-            
-            if (isAuthenticated) {
-                showContent();
-            } else {
-                passwordContainer.style.display = 'flex';
-            }
-        }
-        
         // 显示内容
         function showContent() {
             passwordContainer.style.opacity = '0';
@@ -554,8 +543,7 @@
             const enteredPassword = passwordInput.value.trim();
             
             if (enteredPassword === PASSWORD) {
-                // 密码正确
-                localStorage.setItem('mindLogAuthenticated', 'true');
+                // 密码正确，不使用localStorage保存验证状态
                 showContent();
             } else {
                 // 密码错误
@@ -1113,8 +1101,8 @@
 
         // 初始化
         async function init() {
-            // 检查密码
-            checkPassword();
+            // 直接显示密码验证界面，不检查本地存储
+            passwordContainer.style.display = 'flex';
             
             // 从JSON加载数据
             await loadThoughtsFromJSON();
