@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MindLog | SambyLi</title>
+    <title>MindLog_real | SambyLi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script>
@@ -318,7 +318,7 @@
         <div class="container mx-auto px-4 py-3 flex items-center justify-between nav-shadow">
             <a href="#" class="flex items-center space-x-2">
                 <span class="text-primary text-2xl"><i class="fa fa-lightbulb-o"></i></span>
-                <span class="font-bold text-xl text-dark">MindLog</span>
+                <span class="font-bold text-xl text-dark">MindLog_real</span>
             </a>
             
             <!-- 桌面端导航 -->
@@ -331,11 +331,11 @@
                     </button>
                     <div class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
                         <a href="#" data-category="all" class="block px-4 py-2 text-sm hover:bg-primary/10 hover:text-primary">全部</a>
-                        <a href="#" data-category="ai" class="block px-4 py-2 text-sm hover:bg-primary/10 hover:text-primary">AI</a>
-                        <a href="#" data-category="hobby" class="block px-4 py-2 text-sm hover:bg-primary/10 hover:text-primary">爱好</a>
-                        <a href="#" data-category="milestone" class="block px-4 py-2 text-sm hover:bg-primary/10 hover:text-primary">大事记</a>
-                        <a href="#" data-category="study" class="block px-4 py-2 text-sm hover:bg-primary/10 hover:text-primary">学业</a>
-                        <a href="#" data-category="life" class="block px-4 py-2 text-sm hover:bg-primary/10 hover:text-primary">生活</a>
+                        <a href="#" data-category="xueye" class="block px-4 py-2 text-sm hover:bg-primary/10 hover:text-primary">学业</a>
+                        <a href="#" data-category="shiye" class="block px-4 py-2 text-sm hover:bg-primary/10 hover:text-primary">事业</a>
+                        <a href="#" data-category="ganqing" class="block px-4 py-2 text-sm hover:bg-primary/10 hover:text-primary">感情</a>
+                        <a href="#" data-category="shenghuo" class="block px-4 py-2 text-sm hover:bg-primary/10 hover:text-primary">生活</a>
+                        <a href="#" data-category="qita" class="block px-4 py-2 text-sm hover:bg-primary/10 hover:text-primary">其他</a>
                     </div>
                 </div>
                 <a href="#about" class="font-medium text-dark hover:text-primary transition-colors">关于</a>
@@ -379,11 +379,11 @@
                         </button>
                         <div id="mobile-category-menu" class="mt-1 ml-4 hidden">
                             <a href="#" data-category="all" class="block py-2 text-sm">全部</a>
-                            <a href="#" data-category="ai" class="block py-2 text-sm">AI</a>
-                            <a href="#" data-category="hobby" class="block py-2 text-sm">爱好</a>
-                            <a href="#" data-category="milestone" class="block py-2 text-sm">大事记</a>
-                            <a href="#" data-category="study" class="block py-2 text-sm">学业</a>
-                            <a href="#" data-category="life" class="block py-2 text-sm">生活</a>
+                            <a href="#" data-category="xueye" class="block py-2 text-sm">学业</a>
+                            <a href="#" data-category="shiye" class="block py-2 text-sm">事业</a>
+                            <a href="#" data-category="ganqing" class="block py-2 text-sm">感情</a>
+                            <a href="#" data-category="shenghuo" class="block py-2 text-sm">生活</a>
+                            <a href="#" data-category="qita" class="block py-2 text-sm">其他</a>
                         </div>
                     </div>
                     <a href="#about" class="font-medium text-dark hover:text-primary transition-colors py-2">关于</a>
@@ -397,18 +397,20 @@
         <div class="container mx-auto px-4">
             <!-- 页面标题 -->
             <div class="text-center mb-12 mt-6">
-                <h1 class="text-[clamp(2rem,5vw,3rem)] font-bold text-dark mb-3">MindLog</h1>
+                <h1 class="text-[clamp(2rem,5vw,3rem)] font-bold text-dark mb-3">MindLog_real</h1>
                 <p class="text-gray-600 max-w-2xl mx-auto text-balance">一个生动和立体的李博远^ ^</p>
+                <p class="text-gray-600 max-w-2xl mx-auto text-balance">一个爱记录的李博远^ ^</p>
+
             </div>
             
             <!-- 分类标签 -->
             <div class="flex flex-wrap justify-center gap-2 mb-10">
                 <button data-category="all" class="category-btn bg-primary text-white px-4 py-2 rounded-full text-sm font-medium transition-all">全部</button>
-                <button data-category="ai" class="category-btn bg-white text-dark px-4 py-2 rounded-full text-sm font-medium transition-all">AI</button>
-                <button data-category="hobby" class="category-btn bg-white text-dark px-4 py-2 rounded-full text-sm font-medium transition-all">爱好</button>
-                <button data-category="milestone" class="category-btn bg-white text-dark px-4 py-2 rounded-full text-sm font-medium transition-all">大事记</button>
-                <button data-category="study" class="category-btn bg-white text-dark px-4 py-2 rounded-full text-sm font-medium transition-all">学业</button>
-                <button data-category="life" class="category-btn bg-white text-dark px-4 py-2 rounded-full text-sm font-medium transition-all">生活</button>
+                <button data-category="xueye" class="category-btn bg-white text-dark px-4 py-2 rounded-full text-sm font-medium transition-all">学业</button>
+                <button data-category="shiye" class="category-btn bg-white text-dark px-4 py-2 rounded-full text-sm font-medium transition-all">事业</button>
+                <button data-category="ganqing" class="category-btn bg-white text-dark px-4 py-2 rounded-full text-sm font-medium transition-all">感情</button>
+                <button data-category="shenghuo" class="category-btn bg-white text-dark px-4 py-2 rounded-full text-sm font-medium transition-all">生活</button>
+                <button data-category="qita" class="category-btn bg-white text-dark px-4 py-2 rounded-full text-sm font-medium transition-all">其他</button>
             </div>
             
             <!-- 思考内容流 -->
@@ -466,10 +468,10 @@
     <section id="about" class="bg-white py-16 content-fade-in" style="opacity: 0; visibility: hidden;">
         <div class="container mx-auto px-4">
             <div class="max-w-3xl mx-auto text-center">
-                <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-dark mb-6">关于MindLog</h2>
+                <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-dark mb-6">关于MindLog_real</h2>
                 <p class="text-gray-600 mb-8 leading-relaxed">
-                    这里是我通过文字记录自己的地方。<br>
-                    包括我的日常生活、兴趣爱好、思考方式和我所关注的领域等。
+                    这里是我通过文字和图片记录自己的地方，尤其是记录自己的大学生活。<br>
+                    这将会是我最最最最宝贵的数字资源。
                 </p>
                 <div class="flex justify-center space-x-4">
                     <a href="mailto:1920295921@qq.com" target="_blank" class="text-primary hover:text-primary/80 transition-colors">
@@ -493,12 +495,12 @@
                 <div class="mb-4 md:mb-0 text-center md:text-left">
                     <a href="#" class="flex items-center justify-center md:justify-start space-x-2">
                         <span class="text-white text-xl"><i class="fa fa-lightbulb-o"></i></span>
-                        <span class="font-bold text-lg">MindLog</span>
+                        <span class="font-bold text-lg">MindLog_real</span>
                     </a>
                     <p class="text-gray-400 text-sm mt-1">记录思考，见证成长</p>
                 </div>
                 <div class="text-gray-400 text-sm">
-                    &copy; 2024 MindLog | 保留所有权利
+                    &copy; 2025 MindLog_real | 保留所有权利
                 </div>
             </div>
         </div>
@@ -601,20 +603,20 @@
 
         // 分类名称映射
         const categoryNames = {
-            'ai': 'AI',
-            'hobby': '爱好',
-            'milestone': '大事记',
-            'study': '学业',
-            'life': '生活'
+            'xueye': '学业',
+            'shiye': '事业',
+            'ganqing': '感情',
+            'shenghuo': '生活',
+            'qita': '其他'
         };
 
         // 分类颜色映射
         const categoryColors = {
-            'ai': 'bg-blue-500',
-            'hobby': 'bg-purple-500',
-            'milestone': 'bg-orange-500',
-            'study': 'bg-green-500',
-            'life': 'bg-pink-500'
+            'xueye': 'bg-blue-500',
+            'shiye': 'bg-purple-500',
+            'ganqing': 'bg-orange-500',
+            'shenghuo': 'bg-green-500',
+            'qita': 'bg-pink-500'
         };
 
         // 从JSON文件加载思考内容
@@ -644,11 +646,11 @@
         function calculateCategoryCounts() {
             const counts = {
                 all: thoughts.length,
-                ai: 0,
-                hobby: 0,
-                milestone: 0,
-                study: 0,
-                life: 0
+                xueye: 0,
+                shiye: 0,
+                ganqing: 0,
+                shenghuo: 0,
+                qita: 0
             };
             
             thoughts.forEach(thought => {
@@ -673,20 +675,20 @@
                     case 'all':
                         buttonText = '全部';
                         break;
-                    case 'ai':
-                        buttonText = 'AI';
-                        break;
-                    case 'hobby':
-                        buttonText = '爱好';
-                        break;
-                    case 'milestone':
-                        buttonText = '大事记';
-                        break;
-                    case 'study':
+                    case 'xueye':
                         buttonText = '学业';
                         break;
-                    case 'life':
+                    case 'shiye':
+                        buttonText = '事业';
+                        break;
+                    case 'ganqing':
+                        buttonText = '感情';
+                        break;
+                    case 'shenghuo':
                         buttonText = '生活';
+                        break;
+                    case 'qita':
+                        buttonText = '其他';
                         break;
                 }
                 
@@ -821,11 +823,11 @@
         function updateCategoryCountsAfterSearch() {
             const counts = {
                 all: filterThoughts('all', currentSearchTerm).length,
-                ai: filterThoughts('ai', currentSearchTerm).length,
-                hobby: filterThoughts('hobby', currentSearchTerm).length,
-                milestone: filterThoughts('milestone', currentSearchTerm).length,
-                study: filterThoughts('study', currentSearchTerm).length,
-                life: filterThoughts('life', currentSearchTerm).length
+                xueye: filterThoughts('xueye', currentSearchTerm).length,
+                shiye: filterThoughts('shiye', currentSearchTerm).length,
+                ganqing: filterThoughts('ganqing', currentSearchTerm).length,
+                shenghuo: filterThoughts('shenghuo', currentSearchTerm).length,
+                qita: filterThoughts('qita', currentSearchTerm).length
             };
             
             const categoryButtons = document.querySelectorAll('.category-btn');
@@ -837,20 +839,20 @@
                     case 'all':
                         buttonText = '全部';
                         break;
-                    case 'ai':
-                        buttonText = 'AI';
-                        break;
-                    case 'hobby':
-                        buttonText = '爱好';
-                        break;
-                    case 'milestone':
-                        buttonText = '大事记';
-                        break;
-                    case 'study':
+                    case 'xueye':
                         buttonText = '学业';
                         break;
-                    case 'life':
+                    case 'shiye':
+                        buttonText = '事业';
+                        break;
+                    case 'ganqing':
+                        buttonText = '感情';
+                        break;
+                    case 'shenghuo':
                         buttonText = '生活';
+                        break;
+                    case 'qita':
+                        buttonText = '其他';
                         break;
                 }
                 
