@@ -164,14 +164,18 @@
             padding-bottom: 0.5rem;
         }
         
-        /* 密码验证界面样式 */
-        .password-container {
+        /* 密码验证界面样式（修改为全屏模态框） */
+        .password-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: linear-gradient(135deg, #4A6FA5 0%, #3D405B 100%);
-            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            z-index: 999;
             transition: opacity 0.5s ease;
         }
         
@@ -274,8 +278,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="font-inter bg-neutral/30 text-dark min-h-screen flex flex-col">
-    <!-- 密码验证界面 -->
-    <div id="password-container" class="password-container">
+    <!-- 密码验证界面（修改为模态框） -->
+    <div id="password-modal" class="password-modal">
         <div class="password-card">
             <div class="password-icon">
                 <i class="fa fa-lock"></i>
@@ -508,7 +512,7 @@
     <script>
         // 密码验证
         const PASSWORD = '513870';
-        const passwordContainer = document.getElementById('password-container');
+        const passwordModal = document.getElementById('password-modal');
         const passwordForm = document.getElementById('password-form');
         const passwordInput = document.getElementById('password');
         const passwordError = document.getElementById('password-error');
@@ -518,9 +522,9 @@
         
         // 显示内容
         function showContent() {
-            passwordContainer.style.opacity = '0';
+            passwordModal.style.opacity = '0';
             setTimeout(() => {
-                passwordContainer.style.display = 'none';
+                passwordModal.style.display = 'none';
             }, 500);
             
             // 显示内容并添加淡入动画
@@ -1102,7 +1106,7 @@
         // 初始化
         async function init() {
             // 直接显示密码验证界面，不检查本地存储
-            passwordContainer.style.display = 'flex';
+            passwordModal.style.display = 'flex';
             
             // 从JSON加载数据
             await loadThoughtsFromJSON();
