@@ -937,7 +937,7 @@
             }
         }
         
-        // 显示图片画廊
+        // 显示图片画廊 - 修改后的版本
         function showImageGallery(images) {
             const overlay = document.createElement('div');
             overlay.className = 'image-modal';
@@ -946,9 +946,12 @@
             const content = document.createElement('div');
             content.className = 'image-modal-content';
             
+            // 当前显示的图片索引
+            let currentIndex = 0;
+            
             // 添加图片
             const img = document.createElement('img');
-            img.src = `pic/${images[0]}`;
+            img.src = `pic/${images[currentIndex]}`;
             img.alt = '图片预览';
             content.appendChild(img);
             
@@ -958,20 +961,89 @@
             closeBtn.innerHTML = '<i class="fa fa-times"></i>';
             content.appendChild(closeBtn);
             
+            // 添加左右箭头导航
+            const prevBtn = document.createElement('div');
+            prevBtn.className = 'absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 text-white w-10 h-10 rounded-full flex items-center justify-center cursor-pointer';
+            prevBtn.innerHTML = '<i class="fa fa-chevron-left"></i>';
+            content.appendChild(prevBtn);
+            
+            const nextBtn = document.createElement('div');
+            nextBtn.className = 'absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 text-white w-10 h-10 rounded-full flex items-center justify-center cursor-pointer';
+            nextBtn.innerHTML = '<i class="fa fa-chevron-right"></i>';
+            content.appendChild(nextBtn);
+            
+            // 添加图片指示器
+            const indicator = document.createElement('div');
+            indicator.className = 'absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-3 py-1 rounded-full text-sm';
+            indicator.textContent = `${currentIndex + 1}/${images.length}`;
+            content.appendChild(indicator);
+            
             overlay.appendChild(content);
             document.body.appendChild(overlay);
+            
+            // 更新图片显示
+            function updateImage() {
+                img.src = `pic/${images[currentIndex]}`;
+                indicator.textContent = `${currentIndex + 1}/${images.length}`;
+            }
+            
+            // 上一张图片
+            prevBtn.addEventListener('click', () => {
+                currentIndex = (currentIndex - 1 + images.length) % images.length;
+                updateImage();
+            });
+            
+            // 下一张图片
+            nextBtn.addEventListener('click', () => {
+                currentIndex = (currentIndex + 1) % images.length;
+                updateImage();
+            });
+            
+            // 键盘导航
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') {
+                    currentIndex = (currentIndex - 1 + images.length) % images.length;
+                    updateImage();
+                } else if (e.key === 'ArrowRight') {
+                    currentIndex = (currentIndex + 1) % images.length;
+                    updateImage();
+                } else if (e.key === 'Escape') {
+                    document.body.removeChild(overlay);
+                }
+            });
             
             // 关闭事件
             closeBtn.addEventListener('click', () => {
                 document.body.removeChild(overlay);
+                // 移除键盘事件监听
+                document.removeEventListener('keydown', handleKeydown);
             });
             
             // 点击遮罩层关闭
             overlay.addEventListener('click', (e) => {
                 if (e.target === overlay) {
                     document.body.removeChild(overlay);
+                    // 移除键盘事件监听
+                    document.removeEventListener('keydown', handleKeydown);
                 }
             });
+            
+            // 键盘事件处理函数
+            function handleKeydown(e) {
+                if (e.key === 'ArrowLeft') {
+                    currentIndex = (currentIndex - 1 + images.length) % images.length;
+                    updateImage();
+                } else if (e.key === 'ArrowRight') {
+                    currentIndex = (currentIndex + 1) % images.length;
+                    updateImage();
+                } else if (e.key === 'Escape') {
+                    document.body.removeChild(overlay);
+                    document.removeEventListener('keydown', handleKeydown);
+                }
+            }
+            
+            // 添加键盘事件监听
+            document.addEventListener('keydown', handleKeydown);
         }
 
         // 筛选思考内容
