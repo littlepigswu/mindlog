@@ -56,6 +56,25 @@
                     opacity: 0.5;
                 }
             }
+            .image-grid {
+                display: grid;
+                gap: 8px;
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+            .image-container {
+                aspect-ratio: 1;
+                border-radius: 8px;
+                overflow: hidden;
+            }
+            .image-container img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.3s ease;
+            }
+            .image-container:hover img {
+                transform: scale(1.05);
+            }
         }
     </style>
     <style>
@@ -194,7 +213,6 @@
             box-shadow: 0 15px 60px rgba(0, 0, 0, 0.3);
             transform: translateY(-5px);
         }
-
         
         .password-icon {
             width: 80px;
@@ -274,6 +292,66 @@
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* 图片预览样式 */
+        .image-preview {
+            height: 180px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+        
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .image-preview:hover img {
+            transform: scale(1.03);
+        }
+        
+        .image-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .image-modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+        
+        .image-modal-content img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+        }
+        
+        .image-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            background: rgba(0,0,0,0.5);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -706,6 +784,23 @@
             // 处理内容中的换行符
             const formattedContent = thought.content.replace(/\n/g, '<br>');
             
+            // 处理图片预览
+            let imagesHtml = '';
+            if (thought.media && thought.media.length > 0) {
+                // 只显示第一张图片作为预览
+                const firstImage = thought.media[0];
+                imagesHtml = `
+                    <div class="image-preview cursor-pointer">
+                        <img 
+                            src="pic/${firstImage}" 
+                            alt="${thought.title}" 
+                            loading="lazy"
+                            data-all-images='${JSON.stringify(thought.media)}'
+                        >
+                    </div>
+                `;
+            }
+            
             // 卡片内容
             card.innerHTML = `
                 <div class="p-6">
@@ -716,6 +811,7 @@
                         <span class="ml-2 text-sm text-gray-500">${formatDate(thought.date)}</span>
                     </div>
                     <h3 class="text-xl font-bold mt-4 mb-3 text-dark">${thought.title}</h3>
+                    ${imagesHtml}
                     <p class="text-gray-600 mb-4 line-clamp-4">${formattedContent}</p>
                     <button class="read-more-btn text-primary font-medium hover:text-primary/80 transition-colors flex items-center">
                         阅读更多
@@ -730,6 +826,16 @@
                 showThoughtDetail(thought);
             });
             
+            // 添加图片预览点击事件
+            if (thought.media && thought.media.length > 0) {
+                const imagePreview = card.querySelector('.image-preview');
+                imagePreview.addEventListener('click', (e) => {
+                    const imgElement = e.currentTarget.querySelector('img');
+                    const allImages = JSON.parse(imgElement.dataset.allImages);
+                    showImageGallery(allImages);
+                });
+            }
+            
             return card;
         }
 
@@ -743,6 +849,28 @@
         function showThoughtDetail(thought) {
             // 处理内容中的换行符
             const formattedContent = thought.content.replace(/\n/g, '<br>');
+            
+            // 处理图片网格
+            let imagesHtml = '';
+            if (thought.media && thought.media.length > 0) {
+                imagesHtml = `
+                    <div class="mt-6">
+                        <h4 class="text-lg font-semibold mb-3 text-dark">相关图片</h4>
+                        <div class="image-grid">
+                            ${thought.media.map(image => `
+                                <div class="image-container cursor-pointer">
+                                    <img 
+                                        src="pic/${image}" 
+                                        alt="${thought.title}" 
+                                        loading="lazy"
+                                        data-all-images='${JSON.stringify(thought.media)}'
+                                    >
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
             
             // 创建遮罩层
             const overlay = document.createElement('div');
@@ -768,6 +896,7 @@
                     </div>
                     <h2 class="text-2xl font-bold mt-6 mb-4 text-dark">${thought.title}</h2>
                     <p class="text-gray-700 leading-relaxed">${formattedContent}</p>
+                    ${imagesHtml}
                 </div>
             `;
             
@@ -791,6 +920,55 @@
             // 键盘ESC关闭
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
+                    document.body.removeChild(overlay);
+                }
+            });
+            
+            // 为详情页中的图片添加点击事件
+            if (thought.media && thought.media.length > 0) {
+                const imageContainers = modal.querySelectorAll('.image-container');
+                imageContainers.forEach(container => {
+                    container.addEventListener('click', (e) => {
+                        const imgElement = e.currentTarget.querySelector('img');
+                        const allImages = JSON.parse(imgElement.dataset.allImages);
+                        showImageGallery(allImages);
+                    });
+                });
+            }
+        }
+        
+        // 显示图片画廊
+        function showImageGallery(images) {
+            const overlay = document.createElement('div');
+            overlay.className = 'image-modal';
+            
+            // 创建图片容器
+            const content = document.createElement('div');
+            content.className = 'image-modal-content';
+            
+            // 添加图片
+            const img = document.createElement('img');
+            img.src = `pic/${images[0]}`;
+            img.alt = '图片预览';
+            content.appendChild(img);
+            
+            // 添加关闭按钮
+            const closeBtn = document.createElement('div');
+            closeBtn.className = 'image-modal-close';
+            closeBtn.innerHTML = '<i class="fa fa-times"></i>';
+            content.appendChild(closeBtn);
+            
+            overlay.appendChild(content);
+            document.body.appendChild(overlay);
+            
+            // 关闭事件
+            closeBtn.addEventListener('click', () => {
+                document.body.removeChild(overlay);
+            });
+            
+            // 点击遮罩层关闭
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
                     document.body.removeChild(overlay);
                 }
             });
